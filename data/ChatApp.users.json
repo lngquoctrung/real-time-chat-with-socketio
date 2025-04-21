@@ -1,0 +1,45 @@
+[{
+  "_id": {
+    "$oid": "674ca74945d4c6dfa272a6a6"
+  },
+  "email": "lngquoctrung@gmail.com",
+  "username": "Quoc Trung Ly Nguyen",
+  "pass": "$2a$10$0fg/9jKvTFHIpUzFJPMb1O6vB4TTwscCV.3MKoNVSNSaNzZ5f4Zuy",
+  "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImxuZ3F1b2N0cnVuZ0BnbWFpbC5jb20iLCJ1c2VybmFtZSI6IlF1b2MgVHJ1bmcgTHkgTmd1eWVuIiwiaWF0IjoxNzMzMTYxNTMwLCJleHAiOjE3MzMyNDc5MzB9.IaH-WatF4UcWSgXHMbQRX7vIvzftJt2B3YZdfOwdlkg",
+  "googleId": "109268177393401877333",
+  "socketId": "shAf7jXbYustbHW5AAAR",
+  "status": "online",
+  "onlineAt": "00:47",
+  "offlineAt": "00:42",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "674ca9cf7e90e074ba5edb71"
+  },
+  "email": "lynguyenquoctrung@gmail.com",
+  "username": "QcTrung",
+  "pass": "$2a$10$rSn1orA25uwwkqMdX/E9S.5PF4BLOYXFeW/qfhZCt4A5lzXuxzsZ.",
+  "refreshToken": "",
+  "googleId": "",
+  "socketId": "",
+  "status": "busy",
+  "onlineAt": "00:45",
+  "offlineAt": "00:46",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "674d63737202abfdb4e96126"
+  },
+  "email": "hung@gmail.com",
+  "username": "Quang Hung",
+  "pass": "$2a$10$zFwEQ/aTcJZrvB23gvM1Yu19twD05KA642rbq1C7NBAOGKwLHYqzS",
+  "refreshToken": "",
+  "googleId": "",
+  "socketId": "",
+  "status": "busy",
+  "onlineAt": "00:46",
+  "offlineAt": "00:46",
+  "__v": 0
+}]
