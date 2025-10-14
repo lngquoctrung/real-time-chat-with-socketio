@@ -34,3 +34,5 @@ services:
 networks:
     chat-app-network:
         driver: bridge
+    shared-network:
+        external: true
