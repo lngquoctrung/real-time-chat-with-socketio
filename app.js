@@ -7,17 +7,17 @@ const flash = require('connect-flash');
 const passport = require('passport');
 const dotenv = require('dotenv');
 const connectDB = require('./config/database');
-const authentication = require('./middlewares/authentication');
+const authentication = require('./middlewares/authentication/authMiddleware');
 const socketService = require('./services/socketService');
 dotenv.config();
 require('./config/passport');
 
 
 // * ------- ENVIRONMENT VARIABLES -------
-const serverHost = process.env.SERVER_HOST;
-const serverPort = process.env.SERVER_PORT;
+const appHost = process.env.APP_HOST;
+const appPort = process.env.APP_PORT;
 // Rise error if missing configuration
-if(!serverHost || !serverPort){
+if(!appHost || !appPort){
     console.log('Internal server error: missing configuration');
     process.exit(1);
 }
@@ -88,12 +88,20 @@ app.get('/register', (req, res) => {
     });
 });
 
+app.get('health-check', (req, res) => {
+    res.json({
+        status: 'ok',
+        message: 'Server is running',
+        timestamp: new Date().toISOString(),
+    });
+});
+
 
 // * ------- START SERVER -------
-const server = app.listen(serverPort, serverHost, async () => {
+const server = app.listen(appPort, appHost, async () => {
     console.clear();
     await connectDB();
-    console.log(`The server is running on http://${serverHost}:${serverPort}`);
+    console.log(`The server is running on http://${appHost}:${appPort}`);
 }).on('error', (error) => {
     console.log('Error occurred: ', error);
 });

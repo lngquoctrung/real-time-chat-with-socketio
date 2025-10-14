@@ -1,0 +1,35 @@
+services:
+    chat-app-db:
+        image: mongo:noble
+        container_name: chat-app-db
+        environment:
+            - MONGO_INITDB_ROOT_USERNAME=${DB_USERNAME}
+            - MONGO_INITDB_ROOT_PASSWORD=${DB_PASSWORD}
+            - MONGO_INITDB_DATABASE=${DB_NAME}
+        volumes:
+            - "./db-data:/data/db"
+        networks:
+            - chat-app-network
+        restart: unless-stopped
+
+    chat-app:
+        container_name: chat-app
+        image: chat-app:latest
+        depends_on:
+            - chat-app-db
+        ports:
+            -  "${APP_HOST}:${APP_PORT}:${APP_PORT}"
+        networks:
+            - chat-app-network
+        restart: unless-stopped
+        healthcheck:
+            test: ["CMD", "curl", "-f", "http://${APP_HOST}:${APP_PORT}/health-check"]
+            retries: 3
+            interval: 30s
+            timeout: 10s
+            start_period: 30s
+        env_file:
+            - .env
+networks:
+    chat-app-network:
+        driver: bridge

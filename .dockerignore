@@ -1,0 +1,9 @@
+.idea/
+.github/
+.git/
+node_modules/
+
+.env
+.gitignore
+README.md
+Lab10-websocket.pdf

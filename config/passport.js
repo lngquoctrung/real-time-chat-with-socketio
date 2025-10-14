@@ -4,24 +4,6 @@ const UserService = require('../services/userService');
 const { accessToken, refreshToken } = require('../config/jwt');
 const bcryptjs = require('bcryptjs');
 
-// // Decide which user's data will store into session
-// passport.serializeUser((user, done) => {
-//     console.log('1')
-//     done(null, user.email);
-// });
-
-// // Get user's data from session and convert user object
-// passport.deserializeUser(async (email, done) => {
-//     try{
-//         console.log('2')
-//         const user = await UserService.get({ email: email });
-//         done(null, user);
-//     }
-//     catch(error){
-//         done(error, null);
-//     }
-// });
-
 passport.use(new GoogleStrategy(
     {
         clientID: process.env.GOOGLE_CLIENT_ID,
