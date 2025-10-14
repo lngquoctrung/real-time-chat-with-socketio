@@ -80,6 +80,12 @@ jobs:
             -
                 name: Push image
                 run: docker compose -f docker-compose.yml push
+        env:
+            APP_HOST: ${{ secrets.APP_HOST }}
+            APP_PORT: ${{ secrets.APP_PORT }}
+            DB_USERNAME: ${{ secrets.DB_USERNAME }}
+            DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+            DB_NAME: ${{ secrets.DB_NAME }}
 
     deploy:
         name: Deploy application to VPS
