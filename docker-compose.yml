@@ -1,6 +1,6 @@
 services:
     chat-app-db:
-        image: mongo:7.0-jammy
+        image: mongo:6.0.26-jammy
         container_name: chat-app-db
         environment:
             - MONGO_INITDB_ROOT_USERNAME=${DB_USERNAME}
