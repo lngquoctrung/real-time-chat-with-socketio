@@ -39,6 +39,7 @@ jobs:
                             echo "ACCESS_TOKEN_KEY=${{ secrets.ACCESS_TOKEN_KEY }}" >> .env
                             echo "REFRESH_TOKEN_KEY=${{ secrets.REFRESH_TOKEN_KEY }}" >> .env
                             echo "BCRYPTJS_SALT=${{ secrets.BCRYPTJS_SALT }}" >> .env
+                            echo "DOCKERHUB_USERNAME=${{ secrets.DOCKERHUB_USERNAME }}" >> .env
 
                             # Set owner and permission for environment file
                             chmod 600 .env
@@ -58,7 +59,7 @@ jobs:
                     target: "${{ secrets.PROJECT_PATH }}"
     
     build-push:
-        name: Build and push Docker Compose image to Docker Hub
+        name: Build and push Docker image to Docker Hub
         needs: setup
         runs-on: ubuntu-latest
         steps:
@@ -72,20 +73,17 @@ jobs:
                     username: ${{ secrets.DOCKERHUB_USERNAME }}
                     password: ${{ secrets.DOCKERHUB_PASSWORD }}
             -
+                name: Setup QEMU
+                uses: docker/setup-qemu-action@v3
+            -
                 name: Setup Docker Buildx
                 uses: docker/setup-buildx-action@v3
             -
-                name: Build with docker-compose
-                run: docker compose -f docker-compose.yml build
-            -
-                name: Push image
-                run: docker compose -f docker-compose.yml push
-        env:
-            APP_HOST: ${{ secrets.APP_HOST }}
-            APP_PORT: ${{ secrets.APP_PORT }}
-            DB_USERNAME: ${{ secrets.DB_USERNAME }}
-            DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-            DB_NAME: ${{ secrets.DB_NAME }}
+                name: Build and push
+                uses: docker/build-push-action@v6
+                with:
+                    push: true
+                    tags: ${{ secrets.DOCKERHUB_USERNAME }}/chat-app:latest
 
     deploy:
         name: Deploy application to VPS
@@ -108,9 +106,6 @@ jobs:
 
                         # Remove old containers and images
                         docker compose down 2>/dev/null || true
-
-                        # Pull new images
-                        docker compose pull
 
                         # Run new containers
                         docker compose up -d

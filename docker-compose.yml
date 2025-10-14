@@ -14,7 +14,7 @@ services:
 
     chat-app:
         container_name: chat-app
-        image: chat-app:latest
+        image: ${DOCKERHUB_USERNAME}/chat-app:latest
         depends_on:
             - chat-app-db
         ports:
