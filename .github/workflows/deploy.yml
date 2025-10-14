@@ -22,26 +22,31 @@ jobs:
                         mkdir -p ${{ secrets.PROJECT_PATH }}
                         cd ${{ secrets.PROJECT_PATH }}
                         
-                        # Create environment file
-                        echo "APP_HOST=${{ secrets.APP_HOST }}" > .env
-                        echo "APP_PORT=${{ secrets.APP_PORT }}" >> .env
-                        echo "DB_USERNAME=${{ secrets.DB_USERNAME }}" >> .env
-                        echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> .env
-                        echo "DB_HOST=${{ secrets.DB_HOST }}" >> .env
-                        echo "DB_PORT=${{ secrets.DB_PORT }}" >> .env
-                        echo "DB_NAME=${{ secrets.DB_NAME }}" >> .env
-                        echo "SESSION_KEY=${{ secrets.SESSION_KEY }}" >> .env
-                        echo "GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }}" >> .env
-                        echo "GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }}" >> .env
-                        echo "GOOGLE_CALLBACK_URL=${{ secrets.GOOGLE_CALLBACK_URL }}" >> .env
-                        echo "GOOGLE_PASSWORD=${{ secrets.GOOGLE_PASSWORD }}" >> .env
-                        echo "ACCESS_TOKEN_KEY=${{ secrets.ACCESS_TOKEN_KEY }}" >> .env
-                        echo "REFRESH_TOKEN_KEY=${{ secrets.REFRESH_TOKEN_KEY }}" >> .env
-                        echo "BCRYPTJS_SALT=${{ secrets.BCRYPTJS_SALT }}" >> .env
+                        # Create environment file if not exists
+                        if [ ! -e ".env" ]; then
+                            echo "APP_HOST=${{ secrets.APP_HOST }}" > .env
+                            echo "APP_PORT=${{ secrets.APP_PORT }}" >> .env
+                            echo "DB_USERNAME=${{ secrets.DB_USERNAME }}" >> .env
+                            echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> .env
+                            echo "DB_HOST=${{ secrets.DB_HOST }}" >> .env
+                            echo "DB_PORT=${{ secrets.DB_PORT }}" >> .env
+                            echo "DB_NAME=${{ secrets.DB_NAME }}" >> .env
+                            echo "SESSION_KEY=${{ secrets.SESSION_KEY }}" >> .env
+                            echo "GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }}" >> .env
+                            echo "GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }}" >> .env
+                            echo "GOOGLE_CALLBACK_URL=${{ secrets.GOOGLE_CALLBACK_URL }}" >> .env
+                            echo "GOOGLE_PASSWORD=${{ secrets.GOOGLE_PASSWORD }}" >> .env
+                            echo "ACCESS_TOKEN_KEY=${{ secrets.ACCESS_TOKEN_KEY }}" >> .env
+                            echo "REFRESH_TOKEN_KEY=${{ secrets.REFRESH_TOKEN_KEY }}" >> .env
+                            echo "BCRYPTJS_SALT=${{ secrets.BCRYPTJS_SALT }}" >> .env
 
-                        # Set owner and permission for environment file
-                        chmod 600 .env
-                        chown ${{ secrets.VPS_USERNAME }}:${{ secrets.VPS_USERNAME }} .env
+                            # Set owner and permission for environment file
+                            chmod 600 .env
+                            chown ${{ secrets.VPS_USERNAME }}:${{ secrets.VPS_USERNAME }} .env
+                        fi
+            - 
+                name: Checkout
+                uses: actions/checkout@v3
             -
                 name: Copy Dockerfile and docker-compose.yml files to VPS
                 uses: appleboy/scp-action@master
@@ -49,9 +54,7 @@ jobs:
                     host: ${{ secrets.VPS_HOST }}
                     username: ${{ secrets.VPS_USERNAME }}
                     key: ${{ secrets.VPS_KEY }}
-                    source: |
-                        Dockerfile
-                        docker-compose.yml
+                    source: "docker-compose.yml"
                     target: "${{ secrets.PROJECT_PATH }}"
     
     build-push:
