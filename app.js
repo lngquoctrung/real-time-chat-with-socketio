@@ -106,7 +106,12 @@ const server = app.listen(appPort, appHost, async () => {
 });
 
 // * ------- SOCKET IO -------
-const io = socketIO(server);
+const io = socketIO(server, {
+    cors: {
+        origin: '*',
+        methods: ['GET', 'POST'],
+    },
+});
 // Allow socket io to access session and cookie
 io.engine.use(sessionMiddleware);
 io.engine.use(cookieMiddleware);
