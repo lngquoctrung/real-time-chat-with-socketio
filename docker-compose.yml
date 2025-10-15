@@ -1,6 +1,6 @@
 services:
     chat-app-db:
-        image: mongo:7.0.25-jammy
+        image: mongo:6-jammy
         container_name: chat-app-db
         environment:
             MONGO_INITDB_ROOT_USERNAME: ${DB_USERNAME}
@@ -17,12 +17,12 @@ services:
         depends_on:
             - chat-app-db
         ports:
-            - "${APP_HOST}:${APP_PORT}:${APP_PORT}"
+            - "127.0.0.1:${APP_PORT}:${APP_PORT}"
         networks:
             - chat-app-network
         restart: unless-stopped
         healthcheck:
-            test: ["CMD", "curl", "-f", "http://chat-app:${APP_PORT}/health-check"]
+            test: ["CMD", "curl", "-f", "http://127.0.0.1:${APP_PORT}/health-check"]
             retries: 3
             interval: 30s
             timeout: 10s
@@ -32,6 +32,7 @@ services:
 networks:
     chat-app-network:
         driver: bridge
+        name: chat-app-network
 
 volumes:
     chat-app-mongo-data:
