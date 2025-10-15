@@ -3,19 +3,18 @@ const dotenv = require('dotenv');
 dotenv.config();
 
 // * ------- ENVIRONMENT VARIABLES -------
-const {
-  DB_USERNAME: dbUsername,
-  DB_PASSWORD: dbPassword,
-  DB_HOST: dbHost,
-  DB_PORT: dbPort,
-  DB_NAME: dbName
-} = process.env;
+const dbHost = process.env.DB_HOST;
+const dbPort = process.env.DB_PORT;
+const dbUsername = process.env.DB_USERNAME;
+const dbPassword = process.env.DB_PASSWORD;
+const dbName = process.env.DB_NAME;
+
 
 // * ------- BUILD MONGO URI -------
 let mongoURI;
 
 if (dbUsername && dbPassword) {
-  mongoURI = `mongodb://${dbUsername}:${dbPassword}@${dbHost}:${dbPort}/${dbName}`;
+  mongoURI = `mongodb://${dbUsername}:${dbPassword}@${dbHost}:${dbPort}/${dbName}?directConnection=true&serverSelectionTimeoutMS=2000&authSource=admin`;
 } else {
   mongoURI = `mongodb://${dbHost}:${dbPort}/${dbName}`;
 }

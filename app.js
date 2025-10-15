@@ -99,7 +99,6 @@ app.get('health-check', (req, res) => {
 
 // * ------- START SERVER -------
 const server = app.listen(appPort, appHost, async () => {
-    console.clear();
     await connectDB();
     console.log(`The server is running on http://${appHost}:${appPort}`);
 }).on('error', (error) => {

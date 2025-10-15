@@ -2,6 +2,7 @@
 .github/
 .git/
 node_modules/
+mongo_database/
 
 .env
 .gitignore
