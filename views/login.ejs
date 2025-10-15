@@ -1,146 +1,108 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
     <head>
         <meta charset="UTF-8" />
-        <title>Login</title>
-        <meta
-            name="viewport"
-            content="width=device-width, initial-scale=1"
-        />
+        <title>Đăng nhập</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
 
-        <link
-            rel="stylesheet"
-            href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
-        />
-        <link
-            rel="stylesheet"
-            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css    "
-        />
+        <link rel="icon" type="image/png" href="https://chat-app.qctrung.site/public/images/icon.png"/>
+        <meta property="og:title" content="Danh sách người dùng - Chat App">
+        <meta property="og:description" content="Ứng dụng chat trực tuyến - Kết nối và trò chuyện với mọi người">
+        <meta property="og:image" content="https://chat-app.qctrung.site/public/images/preview.png">
+        <meta property="og:url" content="https://chat-app.qctrung.site">
+        <meta property="og:type" content="website">
+
+        <link rel="stylesheet" href="/public/css/auth.css"/>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css"/>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-        <style>
-            p.item {
-                padding: 16px;
-                text-align: center;
-                border-radius: 8px;
-                color: white;
-                background-color: green;
-            }
-
-            .google-button {
-                height: 40px;
-                width: 100%;
-                background-color: #4688f1;
-                color: white;
-                text-align: center;
-                line-height: 40px;
-                border-radius: 2px;
-            }
-            .google-button:hover {
-                cursor: pointer;
-                background-color: #2563c7;
-                transition: 0.3s;
-            }
-        </style>
     </head>
 
-    <body class="bg-secondary">
-        <h3 class="text-center my-5 text-light">User Login</h3>
-
-        <!-- buộc toàn bộ dòng và cột phải bỏ trong class container -->
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-md-10 col-lg-8 col-xl-5">
-                    <div class="border p-3 rounded bg-light">
-                        <form action="/auth/login" method="post">
-                            <div class="form-group">
-                                <label for="email">Email</label>
-                                <div class="input-group mb-3">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text">
-                                            <i class="fas fa-user"></i>
-                                        </span>
-                                    </div>
-                                    <input
-                                        id="email"
-                                        name="email"
-                                        value="<%= locals.email || '' %>"
-                                        type="text"
-                                        class="form-control"
-                                        placeholder="Email"
-                                    />
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="pass">Password</label>
-                                <div class="input-group mb-3">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text">
-                                            <i class="fas fa-lock"></i>
-                                        </span>
-                                    </div>
-                                    <input
-                                        id="pass"
-                                        name="pass"
-                                        value="<%= locals.pass || '' %>"
-                                        type="pass"
-                                        class="form-control"
-                                        placeholder="Password"
-                                    />
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="custom-control custom-checkbox">
-                                    <input
-                                        id="remember"
-                                        name="remember"
-                                        type="checkbox"
-                                        class="custom-control-input"
-                                    />
-                                    <label
-                                        class="custom-control-label"
-                                        for="remember"
-                                        >Remember</label
-                                    >
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div
-                                    class="alert alert-danger alert-dismissible fade show <%= locals.isShowErr ? '' : 'd-none' %>"
-                                >
-                                    <button
-                                        type="button"
-                                        class="close"
-                                        data-dismiss="alert"
-                                    >
-                                        &times;
-                                    </button>
-                                    <%= locals.errorMsg || '' %>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <button
-                                    class="btn btn-success px-5"
-                                    type="submit"
-                                >
-                                    Login
-                                </button>
-                            </div>
-                            <div class="form-group">
-                                <p>
-                                    Don't have any account?
-                                    <a href="/register">Register now!</a>
-                                </p>
-                            </div>
-                            <a href="/auth/google">
-                                <div class="google-button mt-4">
-                                    Login by Google
-                                </div>
-                            </a>
-                        </form>
+    <body>
+        <div class="auth-container">
+            <h1 class="auth-title">Đăng Nhập</h1>
+            
+            <div class="auth-card">
+                <form action="/auth/login" method="post">
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <div class="input-group">
+                            <span class="input-group-prepend">
+                                <i class="fas fa-envelope"></i>
+                            </span>
+                            <input
+                                id="email"
+                                name="email"
+                                value="<%= locals.email || '' %>"
+                                type="email"
+                                class="form-control"
+                                placeholder="example@email.com"
+                                required
+                            />
+                        </div>
                     </div>
-                </div>
+
+                    <div class="form-group">
+                        <label for="pass">Mật khẩu</label>
+                        <div class="input-group">
+                            <span class="input-group-prepend">
+                                <i class="fas fa-lock"></i>
+                            </span>
+                            <input
+                                id="pass"
+                                name="pass"
+                                value="<%= locals.pass || '' %>"
+                                type="password"
+                                class="form-control"
+                                placeholder="Nhập mật khẩu"
+                                required
+                            />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="custom-checkbox">
+                            <input
+                                id="remember"
+                                name="remember"
+                                type="checkbox"
+                                class="custom-control-input"
+                            />
+                            <label class="custom-control-label" for="remember">
+                                Ghi nhớ đăng nhập
+                            </label>
+                        </div>
+                    </div>
+
+                    <% if (locals.isShowErr) { %>
+                    <div class="form-group">
+                        <div class="alert">
+                            <button type="button" class="close" onclick="this.parentElement.style.display='none'">&times;</button>
+                            <%= locals.errorMsg || '' %>
+                        </div>
+                    </div>
+                    <% } %>
+
+                    <div class="form-group">
+                        <button class="btn-submit" type="submit">
+                            <i class="fas fa-sign-in-alt"></i>
+                            Đăng nhập
+                        </button>
+                    </div>
+
+                    <div class="form-group auth-link">
+                        <p>Chưa có tài khoản? <a href="/register">Đăng ký ngay</a></p>
+                    </div>
+
+                    <div class="divider">
+                        <span>Hoặc</span>
+                    </div>
+
+                    <a href="/auth/google" style="text-decoration: none;">
+                        <button type="button" class="google-button">
+                            Đăng nhập với Google
+                        </button>
+                    </a>
+                </form>
             </div>
         </div>
     </body>

@@ -45,6 +45,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieMiddleware);
 app.use(sessionMiddleware);
 app.use(flash());
+app.use('/public', express.static(path.join(__dirname, 'public')));
+app.use(authentication);
 app.use((req, res, next) => {
     const msg = req.flash("errorMsg")[0];
     // Get error messages from other middlewares
@@ -57,13 +59,10 @@ app.use((req, res, next) => {
 });
 app.use(passport.initialize());
 app.use(passport.session());
-app.use(authentication);
-
 
 // * ------- ROUTERS -------
 app.use('/auth', require('./routers/userRouter'));
 app.use('/chat', require('./routers/chatRouter'));
-app.use('/public', express.static(path.join(__dirname, 'public')));
 
 
 // * ------- ROUTES -------

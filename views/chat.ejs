@@ -4,209 +4,37 @@
         <meta charset="UTF-8" />
         <title>Trò chuyện</title>
         <meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+        <link rel="icon" type="image/png" href="https://chat-app.qctrung.site/public/images/icon.png"/>
+        <meta property="og:title" content="Danh sách người dùng - Chat App">
+        <meta property="og:description" content="Ứng dụng chat trực tuyến - Kết nối và trò chuyện với mọi người">
+        <meta property="og:image" content="https://chat-app.qctrung.site/public/images/preview.png">
+        <meta property="og:url" content="https://chat-app.qctrung.site">
+        <meta property="og:type" content="website">
+
+        <link rel="stylesheet" href="/public/css/chat.css"/>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"/>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css"/>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
         <script src="/socket.io/socket.io.js"></script>
-        <style>
-            * {
-                box-sizing: border-box;
-            }
-
-            .user {
-                display: flex;
-                align-items: center;
-                padding: 12px 24px;
-                cursor: pointer;
-            }
-
-            .user:nth-child(odd) {
-                background-color: #f4f5f7;
-            }
-
-            .user:hover {
-                background-color: #e6efff;
-                transition: 0.3s;
-            }
-
-            .avatar {
-                font-weight: bold;
-                font-size: 1.5rem;
-                background-color: deepskyblue;
-                width: 50px;
-                height: 50px;
-                margin-right: 16px;
-                border-radius: 50%;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                color: white;
-            }
-
-            .user-info {
-                height: 50px;
-                flex-grow: 1;
-            }
-
-            .user-name {
-                font-size: 1.1rem;
-            }
-
-            .user-info .online {
-                font-size: 0.9rem;
-                color: rgb(99, 99, 99);
-            }
-
-            .user .status {
-                width: 90px;
-                text-align: center;
-            }
-
-            .user:hover {
-                background-color: #e6efff;
-            }
-
-            .user:hover .avatar {
-                background-color: rgb(7, 142, 204);
-                transition: 0.3s;
-            }
-
-            .user:hover .user-name {
-                font-weight: 450;
-                transition: 0.3s;
-            }
-
-            .conversation {
-                background-color: rgb(158, 158, 158);
-                padding: 24px;
-                height: 75vh;
-                overflow: auto;
-            }
-
-            .message {
-                border-radius: 8px;
-                padding: 12px;
-                margin-bottom: 12px;
-                width: max-content;
-                max-width: 60%;
-                font-size: 0.9rem;
-            }
-
-            .img-message {
-                border-radius: 8px;
-                margin-bottom: 12px;
-                width: max-content;
-                max-width: 50%;
-            }
-            .img-message img {
-                max-width: 100%;
-                border-radius: 12px;
-            }
-            .img-message img:hover {
-                opacity: 0.85;
-            }
-
-            .their-message {
-                border-radius: 12px;
-                background-color: #dbeafe;
-            }
-            .their-message:hover {
-                background-color: #b4cbe9;
-                transition: 0.3s;
-            }
-
-            .my-message {
-                border-radius: 12px;
-                background-color: white;
-                margin-left: auto;
-                margin-right: 0;
-            }
-            .my-message:hover {
-                background-color: rgb(231, 231, 231);
-                transition: 0.3s;
-            }
-            .message .time {
-                margin-top: 2px;
-                display: block;
-                font-size: 0.8rem;
-                color: rgb(102, 102, 102);
-            }
-
-            .message-input {
-                border-top: 1px solid rgb(190, 190, 190);
-                display: flex;
-                position: relative;
-            }
-            .typing {
-                background-color: rgb(242, 251, 255);
-                border-radius: 4px;
-                padding: 4px 8px;
-                width: fit-content;
-                font-size: 0.7em;
-                position: absolute;
-                top: -25px;
-                left: 2px;
-                display: none;
-            }
-
-            .message-input input[type="text"] {
-                flex-grow: 1;
-                border: none;
-                padding: 8px 16px;
-            }
-
-            .message-input input[type="text"]:focus {
-                border: none;
-                outline: none;
-                transition: 0.3s;
-            }
-
-            .message-input button {
-                border: 0px;
-                border-radius: 4px;
-                text-decoration: none;
-                padding: 8px 16px;
-                margin: 8px;
-            }
-            .message-input button:hover {
-                background-color: rgb(215, 229, 255);
-            }
-            #send-msg-btn:disabled {
-                opacity: 0.5;
-                pointer-events: none;
-            }
-
-
-            .user .actions {
-                color: rgb(161, 161, 161);
-                font-size: 1.2rem;
-            }
-            .user .actions i {
-                display: inline-block;
-                border-radius: 8px;
-                padding: 12px;
-            }
-            .user .actions i:hover {
-                display: inline-block;
-                color: rgb(128, 128, 128);
-                background-color: rgb(215, 229, 255);
-                transition: 0.3s;
-            }
-        </style>
     </head>
 
     <body>
         <div class="container">
             <div class="row justify-content-center">
-                <div class="col-md-9">
-                    <div class="rounded border mt-3 mb-3">
-                        <div class="user">
-                            <div class="avatar">C</div>
-                            <div class="user-info">
-                                <div class="user-name"><%= locals.receiver.username %></div>
-                                <div class="online">Truy cập lúc <%= locals.receiver.onlineAt %></div>
+                <div class="col-12 col-lg-10 col-xl-9">
+                    <div class="chat-container">
+                        <div class="chat-header">
+                            <div class="user-section">
+                                <div class="avatar">
+                                    <%= locals.receiver.username.charAt(0).toUpperCase() %>
+                                </div>
+                                <div class="user-info">
+                                    <h2 class="user-name"><%= locals.receiver.username %></h2>
+                                    <p class="online">Truy cập lúc <%= locals.receiver.onlineAt %></p>
+                                </div>
                             </div>
                             <div class="actions">
                                 <i class="fas fa-phone-alt"></i>
@@ -214,23 +42,27 @@
                                 <i class="fas fa-search"></i>
                             </div>
                         </div>
-                        <div class="conversation">
-                        </div>
+
+                        <div class="conversation"></div>
+
                         <div class="message-input">
-                            <div class="typing">
-                            </div>
+                            <div class="typing"></div>
                             <input
                                 id="message"
                                 type="text"
                                 name="message"
-                                placeholder="Nhập tin nhắn"
+                                placeholder="Nhập tin nhắn..."
+                                autocomplete="off"
                             />
-                            <button id="send-msg-btn">Gửi</button>
+                            <button id="send-msg-btn">
+                                <i class="fas fa-paper-plane"></i> Gửi
+                            </button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+
         <script>
             const socket = io();
             const senderEmail = "<%= locals.sender.email %>";
@@ -241,7 +73,11 @@
                 const sendButton = $('#send-msg-btn');
                 const messageInput = $('#message');
                 const typingDiv = $('.typing');
-                // Disable send button when new page loads
+                
+                let isTyping = false;
+                let typingTimer = null;
+                let typingTimeout = null;
+                
                 sendButton.prop('disabled', true);
 
                 function renderMessage(message) {
@@ -256,30 +92,56 @@
                         <span class="time">${message.sentAt}</span>
                     `);
                     $('.conversation').append(messageDiv);
+                    $('.conversation').scrollTop($('.conversation')[0].scrollHeight);
                 }
 
                 const handleTyping = () => {
                     const message = messageInput.val().trim();
-                    // If input is not empty then enable submit button and notify typing
+                    
                     if (message !== '') {
                         sendButton.prop('disabled', false);
-                        socket.emit('notify-user-typing', { 
-                            senderEmail, 
-                            receiverEmail,
-                            senderUsername 
-                        });
+                    
+                        if (!isTyping) {
+                            isTyping = true;
+                            socket.emit('notify-user-typing', { 
+                                senderEmail, 
+                                receiverEmail,
+                                senderUsername,
+                                typing: true
+                            });
+                        }
+                    
+                        clearTimeout(typingTimer);
+                        
+                        typingTimer = setTimeout(() => {
+                            isTyping = false;
+                            socket.emit('notify-user-typing', { 
+                                senderEmail, 
+                                receiverEmail,
+                                senderUsername,
+                                typing: false
+                            });
+                        }, 2000);
                     } else {
-                        // If input is empty then disable submit button
                         sendButton.prop('disabled', true);
+                        if (isTyping) {
+                            isTyping = false;
+                            socket.emit('notify-user-typing', { 
+                                senderEmail, 
+                                receiverEmail,
+                                senderUsername,
+                                typing: false
+                            });
+                        }
                     }
-                }
+                };
 
                 const getCurrentTime = () => {
                     const now = new Date();
                     const hours = now.getHours().toString().padStart(2, '0');
                     const minutes = now.getMinutes().toString().padStart(2, '0');
                     return `${hours}:${minutes}`;
-                }
+                };
 
                 const sendMessage = (receiverEmail, msg) => {
                     const messageDiv = $('<div></div>');
@@ -289,37 +151,41 @@
                         <span class="time">${getCurrentTime()}</span>
                     `);
                     $('.conversation').append(messageDiv);
+                    $('.conversation').scrollTop($('.conversation')[0].scrollHeight);
                     socket.emit('send-message', { target: receiverEmail, msg });
-                }
+                };
 
                 const handleSendMessage = () => {
-                    const msg = messageInput.val();
+                    const msg = messageInput.val().trim();
+                    if (!msg) return;
+                    
                     sendMessage(receiverEmail, msg);
                     messageInput.val('');
                     sendButton.prop('disabled', true);
+                    
+                    clearTimeout(typingTimer);
+                    if (isTyping) {
+                        isTyping = false;
+                        socket.emit('notify-user-typing', { 
+                            senderEmail, 
+                            receiverEmail,
+                            senderUsername,
+                            typing: false
+                        });
+                    }
                     typingDiv.hide();
-                }
+                };
 
-                // Disable send button when input is empty
-                if (messageInput.val().trim() === '') {
-                    sendButton.prop('disabled', true); 
-                    typingDiv.hide();
-                }
-                // Active send button when user is typing
                 messageInput.on('input', handleTyping);
-                // Handle send event
                 sendButton.on('click', handleSendMessage);
-                // Support sending messages with Enter key
                 messageInput.on('keypress', function(e) {
                     if (e.which === 13 && !sendButton.prop('disabled')) {
                         handleSendMessage();
                     }
                 });
 
-                // Get message history when entering page
                 socket.emit('get-message-history', { targetEmail: receiverEmail });
 
-                // Listen to message history
                 socket.on('message-history', (messages) => {
                     messages.forEach(msg => {
                         renderMessage(msg);
@@ -327,7 +193,6 @@
                 });
 
                 socket.on('receive-message', (message) => {
-                    // Render the received message in the conversation div
                     const messageDiv = $('<div></div>');
                     messageDiv.addClass('message their-message');
                     messageDiv.html(`
@@ -335,24 +200,34 @@
                         <span class="time">${message.sentAt}</span>
                     `);
                     $('.conversation').append(messageDiv);
+                    $('.conversation').scrollTop($('.conversation')[0].scrollHeight);
                 });
 
-                // Notify that the sender is typing
                 socket.on('get-notification-user-typing', (data) => {
-                    // Only show typing notification if the sender matches the current chat
                     if (data.sender === receiverEmail) {
-                        typingDiv.text(`${data.username} đang soạn tin...`);
-                        typingDiv.show();
+                        clearTimeout(typingTimeout);
                         
-                        // Automatically hide notification after 3 seconds
-                        setTimeout(() => {
-                            typingDiv.hide();
-                        }, 3000);
+                        if (data.typing) {
+                            typingDiv.text(`${data.username} đang soạn tin...`);
+                            typingDiv.fadeIn(200);
+                            
+                            typingTimeout = setTimeout(() => {
+                                typingDiv.fadeOut(200);
+                            }, 3000);
+                        } else {
+                            typingDiv.fadeOut(200);
+                        }
                     }
                 });
+
+                // socket.on('connect', () => {
+                //     console.log('Socket connected:', socket.id);
+                // });
+
+                // socket.on('disconnect', () => {
+                //     console.log('Socket disconnected');
+                // });
             });
         </script>
     </body>
 </html>
-
-

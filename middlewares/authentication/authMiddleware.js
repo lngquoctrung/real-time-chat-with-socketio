@@ -1,7 +1,7 @@
 const { accessToken, refreshToken } = require('../../config/jwt');
 const cookieConfig = require('../../config/cookieConfig');
 
-const authPaths = ['login', 'register', 'google'];
+const authPaths = ['login', 'register', 'google', 'public'];
 
 const checkAuthenticated = (req, res) => {
     // Check accessToken if user click remember me
@@ -51,9 +51,7 @@ const checkAuthenticated = (req, res) => {
 }
 
 const authentication = (req, res, next) => {
-    const isAuthPath = authPaths.some(path => 
-        req.originalUrl.includes(path)
-    );
+    const isAuthPath = authPaths.some(path => req.originalUrl.includes(path));
     const isAuthenticated = checkAuthenticated(req, res);
     // Avoid accessing login or registration pages after authentication
     if(isAuthPath && isAuthenticated)

@@ -1,209 +1,111 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
     <head>
         <meta charset="UTF-8" />
         <title>Danh sách người dùng</title>
         <meta name="viewport" content="width=device-width, initial-scale=1"/>
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"/>
+
+        <link rel="icon" type="image/png" href="https://chat-app.qctrung.site/public/images/icon.png"/>
+        <meta property="og:title" content="Danh sách người dùng - Chat App">
+        <meta property="og:description" content="Ứng dụng chat trực tuyến - Kết nối và trò chuyện với mọi người">
+        <meta property="og:image" content="https://chat-app.qctrung.site/public/images/preview.png">
+        <meta property="og:url" content="https://chat-app.qctrung.site">
+        <meta property="og:type" content="website">
+
+        <link rel="stylesheet" href="/public/css/index.css"/>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css"/>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
         <script src="/socket.io/socket.io.js"></script>
-        <style>
-            * {
-                box-sizing: border-box;
-            }
-
-            .user {
-                display: flex;
-                align-items: center;
-                padding: 12px 24px;
-                cursor: pointer;
-            }
-
-            .user:nth-child(odd) {
-                background-color: #f4f5f7;
-            }
-
-            .user:hover {
-                background-color: #e6efff;
-                transition: 0.3s;
-            }
-
-            .avatar {
-                font-weight: bold;
-                font-size: 1.5rem;
-                background-color: deepskyblue;
-                width: 50px;
-                height: 50px;
-                margin-right: 16px;
-                border-radius: 50%;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                color: white;
-            }
-
-            .user-info {
-                height: 50px;
-                flex-grow: 1;
-            }
-
-            .user-name {
-                font-size: 1.1rem;
-            }
-
-            .user-info .online {
-                font-size: 0.9rem;
-                color: rgb(99, 99, 99);
-            }
-
-            .user .status {
-                width: 90px;
-                text-align: center;
-            }
-
-            .user:hover {
-                background-color: #e6efff;
-            }
-
-            .user:hover .avatar {
-                background-color: rgb(7, 142, 204);
-                transition: 0.3s;
-            }
-
-            .user:hover .user-name {
-                font-weight: 450;
-                transition: 0.3s;
-            }
-
-            .user.offline {
-                opacity: 0.5; /* Blur */
-                pointer-events: none; /* Disable all mouse events, including hover */
-            }
-
-            .user.offline:hover {
-                background-color: transparent; /* No hover effect */
-            }
-
-            .user.offline .avatar {
-                background-color: gray; /* Avatar background color when offline */
-            }
-
-            .user.offline .user-name,
-            .user.offline .online {
-                color: rgb(169, 169, 169); /* Light text color when offline */
-            }
-        </style>
     </head>
 
     <body>
         <div class="container">
             <div class="row justify-content-center">
-                <div class="col-md-7">
-                    <div class="rounded border mt-1 mb-3">
-                        <div class="d-flex px-4 mt-3">
-                            <h4><%= locals.username %></h4>
-                            <button
-                                class="btn btn-success ml-auto"
-                                type="button"
-                                onclick="handleLogout()"
-                            >
-                                Logout
+                <div class="col-12 col-lg-8 col-xl-7">
+                    <div class="main-container">
+                        <div class="header-section">
+                            <div class="user-profile">
+                                <div class="user-avatar">
+                                    <%= locals.username ? locals.username.charAt(0).toUpperCase() : 'U' %>
+                                </div>
+                                <div class="user-details">
+                                    <h4><%= locals.username %></h4>
+                                    <p>Chào mừng trở lại!</p>
+                                </div>
+                            </div>
+                            <button class="logout-btn" type="button" onclick="handleLogout()">
+                                <i class="fas fa-sign-out-alt"></i> Đăng xuất
                             </button>
                         </div>
-                        <h4 class="text-primary text-center my-3">
-                            Danh sách người dùng trực tuyến
-                        </h4>
-                        <p style="padding: 0 24px">
-                            Số người online:
-                            <strong
-                                id="num-of-users"
-                                class="badge badge-danger badge-pill"
-                                >5</strong
-                            >
-                        </p>
-                        <div
-                            id="people"
-                            class="people"
-                        ></div>
+
+                        <div class="content-section">
+                            <h2 class="section-title">Người dùng trực tuyến</h2>
+                            
+                            <div class="online-counter">
+                                <span>Số người online: </span>
+                                <span id="num-of-users" class="online-badge">0</span>
+                            </div>
+
+                            <div id="people" class="people-list"></div>
+                        </div>
                     </div>
-                    <p class="small">
-                        Danh sách này cần được cập nhật tự động mỗi khi có người
-                        dùng đăng nhập hoặc đăng xuất/thoát. Ngoài ra trạng thái
-                        của mỗi người dùng cũng cần được cập nhật mỗi khi họ
-                        tham gia hoặc rời một cuộc trò chuyện.
-                    </p>
-                    <p class="small">
-                        Để cho đơn giản, trang web chỉ cần hỗ trợ với mỗi người
-                        vào một thời điểm, không thể chat với người có trạng
-                        thái là <strong>đang bận</strong>.
-                    </p>
+
+                    <div class="info-text">
+                        <p style="margin-bottom: 8px;">
+                            <strong>Hướng dẫn sử dụng:</strong>
+                        </p>
+                        <p style="margin-bottom: 8px;">
+                            Danh sách cập nhật tự động khi có người dùng đăng nhập/đăng xuất
+                        </p>
+                        <p style="margin-bottom: 0;">
+                            Chỉ có thể chat với người dùng có trạng thái "Đang rảnh"
+                        </p>
+                    </div>
                 </div>
             </div>
 
-            <div
-                id="online-notification"
-                class="alert alert-success position-fixed small"
-                style="bottom: 20px; left: 20px;"
-            >
-                <strong>Trần Quang Trí</strong> vừa mới online
-            </div>
-            <div
-                id="offline-notification"
-                class="alert alert-danger position-fixed small"
-                style="bottom: 20px; right: 20px"
-            >
-                <strong>Trần Quang Trí</strong> đã thoát khỏi ứng dụng
-            </div>
+            <input type="hidden" id="user-email" value="<%= locals.email %>" />
+
+            <div id="online-notification" class="notification"></div>
+            <div id="offline-notification" class="notification"></div>
         </div>
 
         <script>
-            // Socket IO
+            // GIỮ NGUYÊN SCRIPT CỦA BẠN Ở ĐÂY
             const socket = io();
-            const email = "<%= locals.email %>";
-            // Check and store connection status
-            const lastConnectionKey = `last_connection`;
+            const email = document.querySelector('#user-email').value;
+            const lastConnectionKey = 'last_connection';
 
             const handleLogout = async () => {
-                const response = await fetch(
-                    "/auth/logout",
-                    { method: "POST" }
-                );
-                if (response.status === 200 && response.ok)
-                    window.location.replace("/login");
+                const response = await fetch('/auth/logout', { method: 'POST' });
+                if (response.status === 200 && response.ok) {
+                    window.location.replace('/login');
+                }
             };
 
-            // Display notification message
             const displayMessage = (id, msg) => {
                 const toastMsg = $(`#${id}`);
                 toastMsg.html(msg);
-                toastMsg.fadeIn(2000);
+                toastMsg.fadeIn(400);
                 setTimeout(() => {
-                    toastMsg.fadeOut(1000);
-                }, 1000);
-            }
+                    toastMsg.fadeOut(400);
+                }, 3000);
+            };
 
-            // Display toast message when user connected
             const handleConnect = (user) => {
-                // Check last connection time
                 const lastConnection = localStorage.getItem(lastConnectionKey);
-                // If there is no recent connection
                 if (!lastConnection) {
-                    const msg = `<strong>${user.username}</strong> vừa mới online`
+                    const msg = `<strong>${user.username}</strong> vừa mới online`;
                     displayMessage('online-notification', msg);
                 }
-                // Save current connection time
                 localStorage.setItem(lastConnectionKey, Date.now().toString());
-            }
+            };
 
             const handleDisconnect = (user) => {
-                const msg = `<strong>${user.username}</strong> đã thoát khỏi ứng dụng`
+                const msg = `<strong>${user.username}</strong> đã thoát khỏi ứng dụng`;
                 displayMessage('offline-notification', msg);
-                // Remove current connection time when user log out
                 localStorage.removeItem(lastConnectionKey);
-            }
+            };
 
             const displayUser = (user) => {
                 const userDiv = $('<div></div>');
@@ -213,53 +115,43 @@
                     <div class="user-info">
                         <div class="user-name">${user.username}</div>
                         <div class="online">
-                            ${
-                                user.status === 'online' ? 
-                                    `Truy cập lúc: ${user.onlineAt}` : 
-                                    `Đăng xuất lúc: ${user.offlineAt}`
-                            }
+                            ${user.status === 'online' 
+                                ? `Truy cập lúc: ${user.onlineAt}` 
+                                : `Đăng xuất lúc: ${user.offlineAt}`}
                         </div>
                     </div>
                     <div class="status">
-                        <div class="badge ${user.status === 'online' ? 'badge-success' : 'badge-warning'} badge-pill">
+                        <div class="status-badge ${user.status === 'online' ? 'badge-success' : 'badge-warning'}">
                             ${user.status === 'online' ? 'Đang rảnh' : 'Đang bận'}
                         </div>
                     </div>
                 `);
-                // Only chat when user online
-                if(user.status === 'online'){
+                
+                if (user.status === 'online') {
                     userDiv.on('click', () => {
                         window.location.href = `/chat/${user.email}`;
                     });
                 }
                 $('#people').append(userDiv);
-            }
+            };
 
             const handleDisplayUsers = (users) => {
-                console.log(email);
-                // Clear child elements
                 $('#people').empty();
                 const otherUsers = users.filter(u => u.email !== email);
-                // Display the number of online users
                 const otherOnlineUsers = otherUsers.filter(u => u.status === 'online');
                 $('#num-of-users').text(otherOnlineUsers.length);
-                // Display the list of users
+                
                 otherUsers.forEach(user => {
                     displayUser(user);
                 });
-            }
+            };
 
-            // All document is ready === window.onload
             $(document).ready(() => {
-                // Hide toast message
                 $('#online-notification').hide();
                 $('#offline-notification').hide();
-
-                // Catch event user connect to the server
+                
                 socket.on('user-connect', handleConnect);
-                // Catch event user disconnect to the server
                 socket.on('user-disconnect', handleDisconnect);
-                // Display the list of users
                 socket.on('users', handleDisplayUsers);
             });
         </script>

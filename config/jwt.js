@@ -22,6 +22,6 @@ class Token {
 }
 
 const accessToken = new Token(process.env.ACCESS_TOKEN_KEY, '15m');
-const refreshToken = new Token(process.env.REFRESH_TOKEN_KEY, '24h');
+const refreshToken = new Token(process.env.REFRESH_TOKEN_KEY, '3d');
 
 module.exports = { accessToken, refreshToken };
