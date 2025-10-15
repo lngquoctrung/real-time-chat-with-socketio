@@ -14,7 +14,7 @@ const dbName = process.env.DB_NAME;
 let mongoURI;
 
 if (dbUsername && dbPassword) {
-  mongoURI = `mongodb://${dbUsername}:${dbPassword}@${dbHost}:${dbPort}/${dbName}?directConnection=true&serverSelectionTimeoutMS=2000&authSource=admin`;
+  mongoURI = `mongodb://${dbUsername}:${dbPassword}@${dbHost}:${dbPort}/${dbName}?authSource=admin`;
 } else {
   mongoURI = `mongodb://${dbHost}:${dbPort}/${dbName}`;
 }

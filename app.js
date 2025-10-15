@@ -88,7 +88,7 @@ app.get('/register', (req, res) => {
     });
 });
 
-app.get('health-check', (req, res) => {
+app.get('/health-check', (req, res) => {
     res.json({
         status: 'ok',
         message: 'Server is running',

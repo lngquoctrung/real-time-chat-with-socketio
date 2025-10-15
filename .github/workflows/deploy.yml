@@ -83,7 +83,8 @@ jobs:
                 uses: docker/build-push-action@v6
                 with:
                     push: true
-                    tags: ${{ secrets.DOCKERHUB_USERNAME }}/socketio-chat-app:latest
+                    no-cache: 'true'
+                    tags: ${{ secrets.DOCKERHUB_USERNAME }}/chat-app:latest
 
     deploy:
         name: Deploy application to VPS
