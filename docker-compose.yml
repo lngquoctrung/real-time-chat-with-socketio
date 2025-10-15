@@ -16,7 +16,7 @@ services:
         container_name: socketio-chat-app
         image: ${DOCKERHUB_USERNAME}/socketio-chat-app:latest
         depends_on:
-            - socketio-chat-app-db
+            - chat-app-db
         ports:
             - "${APP_HOST}:${APP_PORT}:${APP_PORT}"
         networks:
