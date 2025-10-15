@@ -6,6 +6,7 @@ const cookieParser = require('cookie-parser');
 const flash = require('connect-flash');
 const passport = require('passport');
 const dotenv = require('dotenv');
+const path = require("path");
 const connectDB = require('./config/database');
 const authentication = require('./middlewares/authentication/authMiddleware');
 const socketService = require('./services/socketService');
@@ -62,6 +63,7 @@ app.use(authentication);
 // * ------- ROUTERS -------
 app.use('/auth', require('./routers/userRouter'));
 app.use('/chat', require('./routers/chatRouter'));
+app.use('/public', express.static(path.join(__dirname, 'public')));
 
 
 // * ------- ROUTES -------

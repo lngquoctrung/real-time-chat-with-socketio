@@ -3,6 +3,7 @@
 .git/
 node_modules/
 mongo_database/
+data/
 
 .env
 .gitignore

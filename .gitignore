@@ -1,6 +1,7 @@
 .idea/
 node_modules/
 mongo_database/
+data/
 
 package-lock.json
 .env
