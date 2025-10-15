@@ -46,8 +46,8 @@ jobs:
                             chown ${{ secrets.VPS_USERNAME }}:${{ secrets.VPS_USERNAME }} .env
                         fi
                       
-                      # Pull MongoDB image
-                      docker pull mongo:6-jammy
+                        # Pull MongoDB image
+                        docker pull mongo:6-jammy
             - 
                 name: Checkout
                 uses: actions/checkout@v3
