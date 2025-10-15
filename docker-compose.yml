@@ -12,7 +12,7 @@ services:
             - socketio-chat-app-network
         restart: unless-stopped
 
-    socketio-chat-app:
+    chat-app:
         container_name: socketio-chat-app
         image: ${DOCKERHUB_USERNAME}/socketio-chat-app:latest
         depends_on:
@@ -23,7 +23,7 @@ services:
             - socketio-chat-app-network
         restart: unless-stopped
         healthcheck:
-            test: ["CMD", "curl", "-f", "http://${APP_HOST}:${APP_PORT}/health-check"]
+            test: ["CMD", "curl", "-f", "http://chat-app:${APP_PORT}/health-check"]
             retries: 3
             interval: 30s
             timeout: 10s
