@@ -22,7 +22,7 @@ services:
             - chat-app-network
         restart: unless-stopped
         healthcheck:
-            test: ["CMD", "curl", "-f", "http://127.0.0.1:${APP_PORT}/health-check"]
+            test: ["CMD-SHELL", "wget -q --spider http://127.0.0.1:${APP_PORT}/health-check || exit 1"]
             retries: 3
             interval: 30s
             timeout: 10s
