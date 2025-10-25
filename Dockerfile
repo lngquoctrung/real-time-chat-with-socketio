@@ -1,4 +1,4 @@
-FROM node:slim AS builder
+FROM node:22-slim AS builder
 
 WORKDIR /app
 
@@ -7,7 +7,7 @@ RUN npm install --omit=dev
 
 COPY . .
 
-FROM node:alpine AS runtime
+FROM node:22-alpine AS runtime
 
 WORKDIR /app
 
