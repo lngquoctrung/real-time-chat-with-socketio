@@ -1,26 +1,26 @@
 services:
-    socketio-chat-app-db:
+    database:
         image: mongo:6-jammy
-        container_name: socketio-chat-app-db
+        container_name: socketio-chat-db
         environment:
             MONGO_INITDB_ROOT_USERNAME: ${DB_USERNAME}
             MONGO_INITDB_ROOT_PASSWORD: ${DB_PASSWORD}
         volumes:
-            - "socketio-chat-app-mongo-data:/data/db"
-            - "socketio-chat-app-mongo-config:/data/configdb"
+            - "mongo-data:/data/db"
+            - "mongo-config:/data/configdb"
         networks:
-            - socketio-chat-app-network
+            - app-network
         restart: unless-stopped
 
-    socketio-chat-app:
+    web:
         container_name: socketio-chat-app
         image: ${DOCKERHUB_USERNAME}/socketio-chat-app:latest
         depends_on:
-            - socketio-chat-app-db
+            - database
         ports:
             - "127.0.0.1:${APP_PORT}:${APP_PORT}"
         networks:
-            - socketio-chat-app-network
+            - app-network
         restart: unless-stopped
         healthcheck:
             test: ["CMD-SHELL", "wget -q --spider http://127.0.0.1:${APP_PORT}/health-check || exit 1"]
@@ -31,12 +31,12 @@ services:
         env_file:
             - .env
 networks:
-    socketio-chat-app-network:
+    app-network:
         driver: bridge
-        name: socketio-chat-app-network
+        name: socketio-chat-network
 
 volumes:
-    socketio-chat-app-mongo-data:
-        name: socketio-chat-app-mongo-data
-    socketio-chat-app-mongo-config:
-        name: socketio-chat-app-mongo-config
+    mongo-data:
+        name: socketio-chat-mongo-data
+    mongo-config:
+        name: socketio-chat-mongo-config
