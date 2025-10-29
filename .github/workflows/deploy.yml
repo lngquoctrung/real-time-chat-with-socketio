@@ -87,7 +87,7 @@ jobs:
                 with:
                     push: true
                     no-cache: 'true'
-                    tags: ${{ secrets.DOCKERHUB_USERNAME }}/chat-app:latest
+                    tags: ${{ secrets.DOCKERHUB_USERNAME }}/socketio-chat-app:latest
 
     deploy:
         name: Deploy application to VPS
